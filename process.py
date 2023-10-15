@@ -50,7 +50,24 @@ class Process(Thread):
 
         # Bind to address and ip
         self.UDPServerSocket.bind((self.address, self.localPort))
-        
+
+        found_leader = False
+
+        for proc in self.proc_list:
+            if self.id < proc[1]:
+                found_leader = True
+
+        if not found_leader:
+            self.status = 'LEADER'
+            
+            byteLeaderMessage = str.encode('LEADER')
+            UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+            
+
+            for proc in self.proc_list:
+                UDPClientSocket.sendto(byteLeaderMessage, (proc[0], self.proc.defaultPort))
+
+                
         while True:
 
             bytesSenderPair = self.UDPServerSocket.recvfrom(self.bufferSize)
@@ -94,12 +111,12 @@ class Process(Thread):
                 self.leader['address'] = sender[0]
 
                 for proc in self.proc_list:
-                    if proc[0] == sender:
+                    if proc[0] == sender[0]:
                         self.leader['id'] = proc[1]
                         print ('The new LEADER is ', self.leader['id'], ' at ', self.leader['address'])
                         break
                 
-                print ('{} Is the new Leader with ID: {}'.format(sender, self.leader['id']))
+                print ('{} Is the new Leader with ID: {}'.format(sender[0], self.leader['id']))
 
     # def send_alive(self):
     #     print('Alive Setup')

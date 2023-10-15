@@ -21,5 +21,5 @@ class Alive(Thread):
                 for node in self.proc.proc_list:
                     print('Sending ALIVE to ', node[0], ' at port ', self.proc.defaultPort)
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                    UDPClientSocket.sendto(bytesToSend, (node[1], self.proc.defaultPort))
+                    UDPClientSocket.sendto(bytesToSend, (node[0], self.proc.defaultPort))
                 time.sleep(5)

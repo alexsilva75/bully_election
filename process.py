@@ -65,13 +65,13 @@ class Process(Thread):
                 print('ALIVE received from ', sender)
                 bytesToSend = str.encode('ALIVE-ACK')
                 self.last_alive = 0
-                self.UDPServerSocket.sendto(bytesToSend, (sender, self.defaultPort))
+                self.UDPServerSocket.sendto(bytesToSend, sender)
                 
 
             if message == 'ELECTION':
                 response = str.encode('OK')
                 self.status = 'CANDIDATE'
-                self.UDPServerSocket.sendto(response, (sender, self.defaultPort))
+                self.UDPServerSocket.sendto(response, sender)
                 self.last_alive = 0
                 self.election_time = 0
                 print('ELECTION: I am a candidate!')
@@ -82,7 +82,7 @@ class Process(Thread):
 
             if message == 'LEADER':
                 self.status = 'FOLLOWER'
-                self.leader['address'] = sender
+                self.leader['address'] = sender[0]
 
                 for proc in self.proc_list:
                     if proc[0] == sender:

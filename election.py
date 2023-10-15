@@ -15,7 +15,7 @@ class Election(Thread):
         bytesToSend   = str.encode(msgFromClient)
         bufferSize    = 1024
         while True:
-            if self.proc.last_alive > 15 :
+            if self.proc.last_alive > 15 and self.proc.status == 'FOLLOWER':
                 print('Starting Election')
                 for node in self.proc.proc_list:
                     if node[1] > self.proc.id:
@@ -45,4 +45,5 @@ class Election(Thread):
             if self.proc.status == 'WAITING_ELECTION':
                 self.proc.election_time += 1
             
-            self.proc.last_alive += 1
+            if self.proc.status == 'FOLLOWER':
+                self.proc.last_alive += 1

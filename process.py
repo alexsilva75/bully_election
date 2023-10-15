@@ -74,6 +74,13 @@ class Process(Thread):
                 self.UDPServerSocket.sendto(response, (sender[0], self.defaultPort))
                 self.last_alive = 0
                 self.election_time = 0
+
+                for proc in self.proc_list:
+                    if proc[1] > self.id:
+                        electionMessage = 'ELECTION'
+                        byteMessage = str.encode(electionMessage)
+                        UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+                        UDPClientSocket.sendto(byteMessage, (proc[0], self.proc.defaultPort))
                 print('ELECTION: I am a candidate!')
                 
 

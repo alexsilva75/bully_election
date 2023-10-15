@@ -17,9 +17,9 @@ class Alive(Thread):
         bytesToSend   = str.encode(msgFromClient)
         bufferSize    = 1024
         while True:
-            if self.proc.status == 'LEADER':
-                print('Sending ALIVE to ', node[1], ' at port ', self.proc.defaultPort)
+            if self.proc.status == 'LEADER':                
                 for node in self.proc.proc_list:
+                    print('Sending ALIVE to ', node[1], ' at port ', self.proc.defaultPort)
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
                     UDPClientSocket.sendto(bytesToSend, (node[1], self.proc.defaultPort))
                 time.sleep(5)

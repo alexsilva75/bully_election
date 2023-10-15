@@ -16,7 +16,10 @@ class Election(Thread):
         bufferSize    = 1024
         while True:
             print('Last ALIVE: ', self.proc.last_alive)
-            
+
+            if self.proc.status == 'CANDIDATE' or self.proc.status ==  'WAITING-ELECTION':
+                print('Election Time: ', self.proc.election_time)
+
             if self.proc.last_alive > 15 and self.proc.status == 'FOLLOWER':
                 print('Starting Election')
                 self.proc.status = 'CANDIDATE'
@@ -42,7 +45,7 @@ class Election(Thread):
             if self.proc.election_time > 10 and self.proc.status == 'CANDIDATE':
                 bytesToFollowers = str.encode('LEADER')
                 print('I am the new LEADER')
-                for node in self.proc_list:
+                for node in self.proc.proc_list:
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
                     UDPClientSocket.sendto(bytesToFollowers, (node[0], self.proc.defaultPort))
                     self.proc.election_time = 0

@@ -89,6 +89,7 @@ class Process(Thread):
                 for proc in self.proc_list:
                     if proc[0] == sender:
                         self.leader['id'] = proc[1]
+                        print ('The new LEADER is ', self.leader['id'], ' at ', self.leader['address'])
                         break
                 
                 print ('{} Is the new Leader with ID: {}'.format(sender, self.leader['id']))

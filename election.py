@@ -47,8 +47,10 @@ class Election(Thread):
                     self.proc.status = 'LEADER'
             
             time.sleep(1)
-            if self.proc.status == 'WAITING_ELECTION':
+            if self.proc.status == 'WAITING_ELECTION' or self.proc.status == 'CANDIDATE':
                 self.proc.election_time += 1
             
             if self.proc.status == 'FOLLOWER':
                 self.proc.last_alive += 1
+            
+            print('Last ALIVE: ', self.proc.last_alive)

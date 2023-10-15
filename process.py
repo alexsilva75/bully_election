@@ -79,6 +79,8 @@ class Process(Thread):
 
             if message == 'OK':
                 self.status = 'WAITING-ELECTION'
+                self.last_alive = 0
+                self.election_time = 0
 
             if message == 'LEADER':
                 self.status = 'FOLLOWER'

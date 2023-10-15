@@ -29,11 +29,7 @@ class Process(Thread):
         
         proc_list_file.close()
 
-        # Create a datagram socket
-        self.UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-
-        # Bind to address and ip
-        self.UDPServerSocket.bind((self.address, self.localPort))
+        
 
 
     def print_proc_info(self):
@@ -44,6 +40,12 @@ class Process(Thread):
 
 
     def run(self):
+        # Create a datagram socket
+        self.UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+
+        # Bind to address and ip
+        self.UDPServerSocket.bind((self.address, self.localPort))
+        
         while True:
 
             bytesSenderPair = self.UDPServerSocket.recvfrom(self.bufferSize)
@@ -53,6 +55,7 @@ class Process(Thread):
             sender = bytesSenderPair[1]
 
             if message == 'ALIVE':
+                print('ALIVE received')
                 self.last_alive = 0
                 self.UDPServerSocket.sendto('ALIVE-ACK', sender)
                 
@@ -87,6 +90,7 @@ class Process(Thread):
         bufferSize    = 1024
         while True:
             if self.status == 'LEADER':
+                print('Sending ALIVE')
                 for node in self.proc_list:
                     self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
                     self.UDPClientSocket.sendto(bytesToSend, node[1])

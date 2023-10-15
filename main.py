@@ -7,8 +7,8 @@ proc.print_proc_info()
 # proc.receive()
 
 proc = Process()
-alive = Alive()
-election = Election()
+alive = Alive(proc)
+election = Election(proc)
 
 proc.start()
 alive.start()

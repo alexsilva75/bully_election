@@ -7,7 +7,7 @@ class Process(Thread):
     bufferSize = 1024    
     last_alive = 0
     election_time = 0
-    leader = {'address': '192.168.1.35', 'id': 4}
+    # leader = {'address': '192.168.1.35', 'id': 4}
 
     def __init__(self):
         pidf = open('status.txt', 'r')
@@ -15,6 +15,10 @@ class Process(Thread):
         self.id = pidf.readline().strip()
         self.status = pidf.readline().strip()
         self.address = pidf.readline().strip()
+        leader_info = pidf.readline().strip().split('-')
+
+        self.leader = {'address': leader_info[0], 'id': leader_info[1]}
+
         pidf.close()
 
         proc_list_file = open('proc_list.txt', 'r')

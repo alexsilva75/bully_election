@@ -23,6 +23,7 @@ class Election(Thread):
                         msgFromServer = UDPClientSocket.recvfrom(bufferSize)
                         message = msgFromServer[0].decode('utf-8')
                         
+                        print('Received ', message, ' from ', msgFromServer[1])
 
                         if(message == 'OK'):
                             self.proc.status = 'WAITING-ELECTION'

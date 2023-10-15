@@ -55,9 +55,11 @@ class Process(Thread):
 
             bytesSenderPair = self.UDPServerSocket.recvfrom(self.bufferSize)
 
-            message = bytesSenderPair[0]
+            message = bytesSenderPair[0].decode('utf-8')
 
             sender = bytesSenderPair[1]
+
+            print('Received message: ', message)
 
             if message == 'ALIVE':
                 print('ALIVE received')

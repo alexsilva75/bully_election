@@ -32,7 +32,7 @@ class Election(Thread):
 
             if self.proc.election_time > 10 and self.proc.status == 'WAITING-ELECTION':
                 bytesToFollowers = str.encode('LEADER')
-
+                print('I am the new LEADER')
                 for node in self.proc_list:
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
                     UDPClientSocket.sendto(bytesToFollowers, node[1])

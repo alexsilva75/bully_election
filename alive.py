@@ -20,5 +20,5 @@ class Alive(Thread):
             if self.proc.status == 'LEADER':
                 for node in self.proc.proc_list:
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                    UDPClientSocket.sendto(bytesToSend, node[1])
+                    UDPClientSocket.sendto(bytesToSend, (node[1], self.proc.defaultPort))
                 time.sleep(5)

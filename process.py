@@ -3,7 +3,8 @@ import time
 from threading import Thread
 
 class Process(Thread):
-    localPort = 20005
+    defaultPort = 20001
+    localPort = 20001
     bufferSize = 1024    
     last_alive = 0
     election_time = 0
@@ -61,13 +62,13 @@ class Process(Thread):
             if message == 'ALIVE':
                 print('ALIVE received')
                 self.last_alive = 0
-                self.UDPServerSocket.sendto('ALIVE-ACK', sender)
+                self.UDPServerSocket.sendto('ALIVE-ACK', (sender, self.defaultPort))
                 
 
             if message == 'ELECTION':
                 response = str.encode('OK')
                 self.status = 'CANDIDATE'
-                self.UDPServerSocket.sendto(response, sender)
+                self.UDPServerSocket.sendto(response, (sender, self.defaultPort))
                 self.last_alive = 0
                 self.election_time = 0
                 print('ELECTION: I am a candidate!')
@@ -87,54 +88,54 @@ class Process(Thread):
                 
                 print ('{} Is the new Leader with ID: {}'.format(sender, self.leader['id']))
 
-    def send_alive(self):
-        print('Alive Setup')
-        msgFromClient = "ALIVE"
-        bytesToSend   = str.encode(msgFromClient)
-        bufferSize    = 1024
-        while True:
-            if self.status == 'LEADER':
-                print('Sending ALIVE')
-                for node in self.proc_list:
-                    self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                    self.UDPClientSocket.sendto(bytesToSend, node[1])
-                time.sleep(5)
+    # def send_alive(self):
+    #     print('Alive Setup')
+    #     msgFromClient = "ALIVE"
+    #     bytesToSend   = str.encode(msgFromClient)
+    #     bufferSize    = 1024
+    #     while True:
+    #         if self.status == 'LEADER':
+    #             print('Sending ALIVE')
+    #             for node in self.proc_list:
+    #                 self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+    #                 self.UDPClientSocket.sendto(bytesToSend, node[1])
+    #             time.sleep(5)
     
-    def election(self):
-        print('Election Setup')
-        msgFromClient = "ELECTION"
-        bytesToSend   = str.encode(msgFromClient)
-        bufferSize    = 1024
-        while True:
-            if self.last_alive > 15 :
-                for node in self.proc_list:
-                    if node[1] > self.id:
-                        self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                        self.UDPClientSocket.sendto(bytesToSend, node[1])
-                        msgFromServer = self.UDPClientSocket.recvfrom(bufferSize)
-                        message = msgFromServer[0].decode('utf-8')
+    # def election(self):
+    #     print('Election Setup')
+    #     msgFromClient = "ELECTION"
+    #     bytesToSend   = str.encode(msgFromClient)
+    #     bufferSize    = 1024
+    #     while True:
+    #         if self.last_alive > 15 :
+    #             for node in self.proc_list:
+    #                 if node[1] > self.id:
+    #                     self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+    #                     self.UDPClientSocket.sendto(bytesToSend, node[1])
+    #                     msgFromServer = self.UDPClientSocket.recvfrom(bufferSize)
+    #                     message = msgFromServer[0].decode('utf-8')
                         
 
-                        if(message == 'OK'):
-                            self.status = 'WAITING-ELECTION'
-                            self.last_alive = 0
-                            self.election_time = 0
-                            break
+    #                     if(message == 'OK'):
+    #                         self.status = 'WAITING-ELECTION'
+    #                         self.last_alive = 0
+    #                         self.election_time = 0
+    #                         break
 
-            if self.election_time > 10 and self.status == 'WAITING-ELECTION':
-                bytesToFollowers = str.encode('LEADER')
+    #         if self.election_time > 10 and self.status == 'WAITING-ELECTION':
+    #             bytesToFollowers = str.encode('LEADER')
 
-                for node in self.proc_list:
-                    self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                    self.UDPClientSocket.sendto(bytesToFollowers, node[1])
-                    self.election_time = 0
-                    self.status = 'LEADER'
+    #             for node in self.proc_list:
+    #                 self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+    #                 self.UDPClientSocket.sendto(bytesToFollowers, node[1])
+    #                 self.election_time = 0
+    #                 self.status = 'LEADER'
             
-            time.sleep(1)
-            if self.status == 'WAITING_ELECTION':
-                self.election_time += 1
+    #         time.sleep(1)
+    #         if self.status == 'WAITING_ELECTION':
+    #             self.election_time += 1
             
-            self.last_alive += 1
+    #         self.last_alive += 1
             
 
 

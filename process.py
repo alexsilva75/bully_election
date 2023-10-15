@@ -65,9 +65,9 @@ class Process(Thread):
             
 
             for proc in self.proc_list:
-                UDPClientSocket.sendto(byteLeaderMessage, (proc[0], self.proc.defaultPort))
+                UDPClientSocket.sendto(byteLeaderMessage, (proc[0], self.defaultPort))
 
-                
+
         while True:
 
             bytesSenderPair = self.UDPServerSocket.recvfrom(self.bufferSize)

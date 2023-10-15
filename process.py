@@ -64,7 +64,7 @@ class Process(Thread):
             if message == 'ALIVE':
                 print('ALIVE received')
                 self.last_alive = 0
-                self.UDPServerSocket.sendto('ALIVE-ACK', (sender, self.defaultPort))
+                self.UDPServerSocket.sendto(str.encode('ALIVE-ACK'), (sender, self.defaultPort))
                 
 
             if message == 'ELECTION':

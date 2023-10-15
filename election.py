@@ -19,7 +19,7 @@ class Election(Thread):
                 for node in self.proc.proc_list:
                     if node[1] > self.proc.id:
                         UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                        UDPClientSocket.sendto(bytesToSend, (node[1], self.proc.defaultPort))
+                        UDPClientSocket.sendto(bytesToSend, (node[0], self.proc.defaultPort))
                         msgFromServer = UDPClientSocket.recvfrom(bufferSize)
                         message = msgFromServer[0].decode('utf-8')
                         
@@ -36,7 +36,7 @@ class Election(Thread):
                 print('I am the new LEADER')
                 for node in self.proc_list:
                     UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                    UDPClientSocket.sendto(bytesToFollowers, (node[1], self.proc.defaultPort))
+                    UDPClientSocket.sendto(bytesToFollowers, (node[0], self.proc.defaultPort))
                     self.proc.election_time = 0
                     self.proc.status = 'LEADER'
             

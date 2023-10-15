@@ -71,14 +71,14 @@ class Process(Thread):
             if message == 'ELECTION':
                 response = str.encode('OK')
                 self.status = 'CANDIDATE'
-                self.UDPServerSocket.sendto(response, sender)
+                self.UDPServerSocket.sendto(response, (sender[0], self.defaultPort))
                 self.last_alive = 0
                 self.election_time = 0
                 print('ELECTION: I am a candidate!')
                 
 
-            # if message == 'OK':
-            #     self.status = 'WAITING-ELECTION'
+            if message == 'OK':
+                self.status = 'WAITING-ELECTION'
 
             if message == 'LEADER':
                 self.status = 'FOLLOWER'

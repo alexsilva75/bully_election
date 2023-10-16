@@ -107,16 +107,29 @@ class Process(Thread):
                 self.election_time = 0
 
             if message == 'LEADER':
-                self.status = 'FOLLOWER'
-                self.leader['address'] = sender[0]
+                UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+                              
 
+                i_am_greater = False
                 for proc in self.proc_list:
                     if proc[0] == sender[0]:
-                        self.leader['id'] = proc[1]
-                        print ('The new LEADER is ', self.leader['id'], ' at ', self.leader['address'])
+                        if self.id < proc[1]:
+                            self.leader['id'] = proc[1]
+                            self.status = 'FOLLOWER'
+                            self.leader['address'] = sender[0]
+                            print ('The new LEADER is ', self.leader['id'], ' at ', self.leader['address'])
+                        else:
+                            i_am_greater = True
+                        
                         break
                 
-                print ('{} Is the new Leader with ID: {}'.format(sender[0], self.leader['id']))
+                    if i_am_greater:
+                        self.status = 'LEADER'
+                        print('I am the new LEADER')
+                        leaderByteMessage = str.encode('LEADER')
+
+                        for proc in self.proc_list:
+                            UDPClientSocket.sendto(leaderByteMessage, (proc[0], self.proc.defaultPort)) 
 
     # def send_alive(self):
     #     print('Alive Setup')

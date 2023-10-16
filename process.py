@@ -97,7 +97,7 @@ class Process(Thread):
                         electionMessage = 'ELECTION'
                         byteMessage = str.encode(electionMessage)
                         UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-                        UDPClientSocket.sendto(byteMessage, (proc[0], self.proc.defaultPort))
+                        UDPClientSocket.sendto(byteMessage, (proc[0], self.defaultPort))
                 print('ELECTION: I am a candidate!')
                 
 

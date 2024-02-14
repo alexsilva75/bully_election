@@ -78,11 +78,25 @@ class Process(Thread):
 
             print('Received message: ', message)
 
-            if message == 'ALIVE':
-                print('ALIVE received from ', sender)
-                bytesToSend = str.encode('ALIVE-ACK')
-                self.last_alive = 0
-                self.UDPServerSocket.sendto(bytesToSend, sender)
+            
+
+            if message[:5] == 'ALIVE':
+                message_arr = message.split('-')
+                sender_id = int(message_arr[1])
+                if self.id > sender_id:
+                    bytesToFollowers = str.encode('LEADER')
+                    print('I am the new LEADER')
+                    for node in self.proc_list:
+                        # UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+                        self.status = 'LEADER'
+                        UDPClientSocket.sendto(bytesToFollowers, (node[0], self.defaultPort))
+                        # self.election_time = 0
+                        
+                else:
+                    print('ALIVE received from ', sender)
+                    bytesToSend = str.encode('ALIVE-ACK')
+                    self.last_alive = 0
+                    self.UDPServerSocket.sendto(bytesToSend, sender)
                 
 
             if message == 'ELECTION':

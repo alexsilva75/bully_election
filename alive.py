@@ -13,8 +13,8 @@ class Alive(Thread):
 
     def run(self):
         print('Alive Setup')
-        msgFromClient = "ALIVE"
-        bytesToSend   = str.encode(msgFromClient)
+        msgToClient = "ALIVE-"+str(self.proc.id)
+        bytesToSend   = str.encode(msgToClient)
         bufferSize    = 1024
         while True:
             if self.proc.status == 'LEADER':                

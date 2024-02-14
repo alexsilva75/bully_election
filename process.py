@@ -86,8 +86,8 @@ class Process(Thread):
                 if int(self.id) > int(sender_id):
                     bytesToFollowers = str.encode('LEADER')
                     print('I am the new LEADER')
-                    for node in self.proc_list:
-                        # UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
+                    UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+                    for node in self.proc_list:                         
                         self.status = 'LEADER'
                         UDPClientSocket.sendto(bytesToFollowers, (node[0], self.defaultPort))
                         # self.election_time = 0

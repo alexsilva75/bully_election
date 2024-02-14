@@ -83,7 +83,7 @@ class Process(Thread):
             if message[:5] == 'ALIVE':
                 message_arr = message.split('-')
                 sender_id = int(message_arr[1])
-                if self.id > sender_id:
+                if self.id > int(sender_id):
                     bytesToFollowers = str.encode('LEADER')
                     print('I am the new LEADER')
                     for node in self.proc_list:
